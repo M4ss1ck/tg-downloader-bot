@@ -1,11 +1,16 @@
 import { Queue, Worker, QueueEvents } from 'bullmq';
 import { logger } from '../logger/index.js';
 
-export const downloader = new Queue('dl');
-export const queueEvents = new QueueEvents('dl');
+const connection = {
+    host: "localhost",
+    port: 6379
+}
+
+export const downloader = new Queue('dl', { connection });
+export const queueEvents = new QueueEvents('dl', { connection });
 export const worker = new Worker('dl', async job => {
     logger.log(job.data);
-}, { concurrency: 1 });
+}, { concurrency: 1, connection });
 
 worker.on('completed', job => {
     logger.log(`${job.id} has completed!`);
