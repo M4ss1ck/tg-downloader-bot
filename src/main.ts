@@ -27,17 +27,17 @@ bot
 bot.launch()
 logger.success('BOT INICIADO')
 
-app.listen(PORT, () => logger.success(`Server listening on port: ${PORT}`));
+const server = app.listen(PORT, () => logger.success(`Server listening on port: ${PORT}`));
+
+const gracefulStop = (signal: string) => async () => {
+    await worker.close()
+    server.closeAllConnections()
+    bot.stop(signal)
+}
 
 // Enable graceful stop
-process.once('SIGINT', async () => {
-    await worker.close()
-    bot.stop('SIGINT')
-})
-process.once('SIGTERM', async () => {
-    await worker.close()
-    bot.stop('SIGTERM')
-})
+process.once('SIGINT', gracefulStop('SIGINT'))
+process.once('SIGTERM', gracefulStop('SIGTERM'))
 
 process.on("uncaughtException", function (err) {
     // Handle the error safely
