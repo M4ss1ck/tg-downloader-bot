@@ -1,5 +1,6 @@
 import { Queue, Worker, QueueEvents, MetricsTime } from 'bullmq';
 import { logger } from '../logger/index.js';
+import { downloadFile } from '../utils/downloader.js';
 
 const connection = {
     host: "localhost",
@@ -8,9 +9,7 @@ const connection = {
 
 export const downloader = new Queue('dl', { connection });
 export const queueEvents = new QueueEvents('dl', { connection });
-export const worker = new Worker('dl', async job => {
-    logger.log(job.data);
-}, {
+export const worker = new Worker('dl', downloadFile, {
     concurrency: 1,
     connection,
     metrics: {
