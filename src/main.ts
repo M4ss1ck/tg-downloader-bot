@@ -31,10 +31,22 @@ app.listen(PORT, () => logger.success(`Server listening on port: ${PORT}`));
 
 // Enable graceful stop
 process.once('SIGINT', async () => {
-    await worker.close();
+    await worker.close()
     bot.stop('SIGINT')
 })
 process.once('SIGTERM', async () => {
-    await worker.close();
+    await worker.close()
     bot.stop('SIGTERM')
 })
+
+process.on("uncaughtException", function (err) {
+    // Handle the error safely
+    logger.info("Uncaught exception")
+    logger.error(err)
+});
+
+process.on("unhandledRejection", (reason, promise) => {
+    // Handle the error safely
+    logger.info("Unhandled Rejection at: Promise")
+    logger.error({ promise, reason })
+});
