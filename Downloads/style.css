@@ -1,0 +1,27 @@
+:root {
+    --bg-color: #19191c;
+    --text-color: #cabcb8;
+    --border-size: 3px;
+    --border-angle: 0turn;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: var(--text-color);
+    background-color: var(--bg-color);
+
+    background: rgb(93, 88, 87);
+    background: radial-gradient(circle, rgba(93, 88, 87, 1) 0%, rgba(49, 49, 54, 1) 15%, rgba(0, 0, 0, 1) 100%);
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+img {
+    border-radius: 20%;
+}
