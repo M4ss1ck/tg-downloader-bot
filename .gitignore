@@ -3,3 +3,4 @@ dist
 prisma/*.db
 .env
 *.csv
+Downloads
