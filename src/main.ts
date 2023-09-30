@@ -7,6 +7,7 @@ import { start } from "./middleware/start.js";
 import { commands } from "./middleware/commands.js";
 import { actions } from "./middleware/actions.js";
 import { admin } from "./middleware/admin.js";
+import { worker } from "./queues/download.js";
 
 const bot = new Telegraf(TOKEN, {
     handlerTimeout: 9000000
@@ -29,5 +30,11 @@ logger.success('BOT INICIADO')
 app.listen(PORT, () => logger.success(`Server listening on port: ${PORT}`));
 
 // Enable graceful stop
-process.once('SIGINT', () => bot.stop('SIGINT'))
-process.once('SIGTERM', () => bot.stop('SIGTERM'))
+process.once('SIGINT', async () => {
+    await worker.close();
+    bot.stop('SIGINT')
+})
+process.once('SIGTERM', async () => {
+    await worker.close();
+    bot.stop('SIGTERM')
+})
