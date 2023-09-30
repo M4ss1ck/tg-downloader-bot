@@ -1,6 +1,7 @@
 import { Telegraf } from "telegraf";
+import { app } from "./server/app.js";
 import { logger } from "./logger/index.js";
-import { TOKEN } from "./config/index.js";
+import { TOKEN, PORT } from "./config/index.js";
 import { validator } from "./middleware/validator.js";
 import { start } from "./middleware/start.js";
 import { commands } from "./middleware/commands.js";
@@ -24,6 +25,8 @@ bot
 
 bot.launch()
 logger.success('BOT INICIADO')
+
+app.listen(PORT, () => logger.success(`Server listening on port: ${PORT}`));
 
 // Enable graceful stop
 process.once('SIGINT', () => bot.stop('SIGINT'))
