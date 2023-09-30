@@ -4,6 +4,7 @@ import { logger } from "../logger/index.js";
 import { csvExport } from "../utils/csvExport.js";
 import { unlink } from "fs/promises";
 import { downloader } from "../queues/download.js";
+import { getTotalSizeRaw, convertBytes } from "../utils/getSize.js";
 
 export const commands = new Composer()
 
@@ -18,10 +19,16 @@ commands.command('metrics', async ctx => {
     ctx.sendMessage(`<pre>${JSON.stringify(metrics, null, 2)}</pre>`, { parse_mode: "HTML" })
 })
 
-commands.command('myid', async ctx => {
-    if (ctx.chat.type === 'private') {
-        const id = ctx.message.text.replace(/^\/myid(@\w+)?/, '').trim()
-
+commands.command('status', async ctx => {
+    try {
+        if (ctx.chat.type === 'private') {
+            const size = await getTotalSizeRaw('Downloads')
+            console.log(size)
+            ctx.replyWithHTML(`Used space: ${convertBytes(size)}`)
+        }
+    } catch (error) {
+        logger.log(error)
+        ctx.replyWithHTML('Oops! Some random sprites ate the previous command\'s response')
     }
 })
 
