@@ -9,7 +9,7 @@ import { getConfig } from "./config.js"
 export const downloadFile = async (job: Job) => {
     logger.info('Processing job ' + job.id)
     try {
-        const { name, size, user, url } = job.data
+        const { name, size, user, url } = job.data.data
         if (!url) {
             throw new Error('No url received')
         }
