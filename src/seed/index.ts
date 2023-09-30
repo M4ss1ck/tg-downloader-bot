@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { logger } from "../logger/index.js";
-import { ADMIN_ID } from "../config/index.js";
+import { ADMIN_ID, URL_PREFIX } from "../config/index.js";
 
 const prisma = new PrismaClient();
 
@@ -16,6 +16,15 @@ const seed = async () => {
         }
     }).then(res => logger.info(res))
 
+    await prisma.config.upsert({
+        where: {
+            id: 'global'
+        },
+        update: {},
+        create: {
+            downloadURL: URL_PREFIX + '/dl/'
+        }
+    }).then(res => logger.info(res))
 }
 
 seed()
