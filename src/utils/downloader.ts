@@ -21,6 +21,7 @@ export const downloadFile = async (job: Job) => {
         const link = __dirname + "/Downloads/" + filename
         await cp(url, link)
         await unlink(url)
+        logger.success('Link: ' + link)
         await bot.telegram.sendMessage(user, `File uploaded, you can find it <a href="${link}">here</a>`, {
             parse_mode: "HTML",
             disable_web_page_preview: true,
