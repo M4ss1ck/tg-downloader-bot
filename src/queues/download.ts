@@ -1,4 +1,4 @@
-import { Queue, Worker, QueueEvents } from 'bullmq';
+import { Queue, Worker, QueueEvents, MetricsTime } from 'bullmq';
 import { logger } from '../logger/index.js';
 
 const connection = {
@@ -10,7 +10,13 @@ export const downloader = new Queue('dl', { connection });
 export const queueEvents = new QueueEvents('dl', { connection });
 export const worker = new Worker('dl', async job => {
     logger.log(job.data);
-}, { concurrency: 1, connection });
+}, {
+    concurrency: 1,
+    connection,
+    metrics: {
+        maxDataPoints: MetricsTime.ONE_WEEK * 4,
+    },
+});
 
 worker.on('completed', job => {
     logger.log(`${job.id} has completed!`);

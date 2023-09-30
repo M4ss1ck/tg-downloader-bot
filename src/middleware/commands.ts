@@ -13,6 +13,11 @@ commands.command(['dls', 'downloads'], async ctx => {
     ctx.sendMessage(`<pre>${JSON.stringify(counts, null, 2)}</pre>`, { parse_mode: "HTML" })
 })
 
+commands.command('metrics', async ctx => {
+    const metrics = await downloader.getMetrics('completed');
+    ctx.sendMessage(`<pre>${JSON.stringify(metrics, null, 2)}</pre>`, { parse_mode: "HTML" })
+})
+
 commands.command('myid', async ctx => {
     if (ctx.chat.type === 'private') {
         const id = ctx.message.text.replace(/^\/myid(@\w+)?/, '').trim()
