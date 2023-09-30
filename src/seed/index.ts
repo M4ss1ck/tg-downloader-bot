@@ -20,7 +20,9 @@ const seed = async () => {
         where: {
             id: 'global'
         },
-        update: {},
+        update: {
+            downloadURL: URL_PREFIX + '/dl/'
+        },
         create: {
             downloadURL: URL_PREFIX + '/dl/'
         }
