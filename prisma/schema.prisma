@@ -19,7 +19,8 @@ model User {
 
 model Config {
   id          String  @id @default("global")
-  maxSize     Int     @default(5) // maximum size in Gb for the queue
+  maxSize     Float   @default(5) // maximum size in Gb for the queue
+  currentSize Float   @default(0) // same here
   downloadURL String? // domain for download links
 }
 
@@ -29,6 +30,6 @@ model Download {
   tgId   String
   path   String
   link   String
-  size   BigInt
+  size   Float
   status String @default("active")
 }
