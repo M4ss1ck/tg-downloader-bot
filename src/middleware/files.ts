@@ -16,7 +16,7 @@ files.on([message('document'), message('video'), message('photo'), message('audi
                 name: file_name,
                 size: file_size,
                 user: user.id,
-                url: file_path,
+                path: file_path,
             }
             const job = await downloader.add(`${user.id}-${file_name ?? Date.now()}`, { data: downloadObject })
             console.log(job.data)

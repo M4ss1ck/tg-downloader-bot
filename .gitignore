@@ -3,4 +3,5 @@ dist
 prisma/*.db
 .env
 *.csv
-Downloads
+public/dl
+notes.txt

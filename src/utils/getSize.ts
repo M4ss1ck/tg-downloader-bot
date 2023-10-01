@@ -3,7 +3,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 
 export const __filename = fileURLToPath(import.meta.url);
-// Downloads directory is outside `dist`
+// public directory is outside `dist`
 export const __dirname = path.dirname(__filename).replace('/dist/utils', '');
 
 export const getAllFiles = async function (dirPath: string, arrayOfFiles: string[] | null = null) {

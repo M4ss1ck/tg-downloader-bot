@@ -22,7 +22,7 @@ commands.command('metrics', async ctx => {
 commands.command('status', async ctx => {
     try {
         if (ctx.chat.type === 'private') {
-            const size = await getTotalSizeRaw('Downloads')
+            const size = await getTotalSizeRaw('public/dl')
             console.log(size)
             ctx.replyWithHTML(`Used space: ${convertBytes(size)}`)
         }

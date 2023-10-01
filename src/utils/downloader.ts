@@ -9,26 +9,30 @@ import { URL_PREFIX } from "../config/index.js"
 
 export const downloadFile = async (job: Job) => {
     logger.info('Processing job ' + job.id)
+    const { name, size, user, path } = job.data.data
+    console.log({ name, size, user, path })
     try {
-        const { name, size, user, url } = job.data.data
-        if (!url) {
+        if (!path) {
             throw new Error('No url received')
         }
         let filename = name
         if (!name) {
-            const index = String(url).lastIndexOf('/')
-            filename = String(url).substring(index + 1)
+            const index = String(path).lastIndexOf('/')
+            filename = String(path).substring(index + 1)
         }
-        await cp(url, __dirname + "/Downloads/" + filename)
+        await cp(path, __dirname + "/public/dl/" + filename)
         const link = URL_PREFIX + "/dl/" + filename
         logger.success('Link: ' + link)
         await bot.telegram.sendMessage(user, `File uploaded, you can find it <a href="${link}">here</a>`, {
             parse_mode: "HTML",
             disable_web_page_preview: true,
         })
-        await unlink(url)
+        await unlink(path)
     } catch (error) {
         logger.error(error)
+        await bot.telegram.sendMessage(user, `Failure copying the file.\nPath: ${path ?? "n/a"}`, {
+            parse_mode: "HTML",
+        })
         throw new Error('Error in downloadFile()')
     }
 }
