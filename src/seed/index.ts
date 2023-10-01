@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { logger } from "../logger/index.js";
 import { ADMIN_ID, URL_PREFIX } from "../config/index.js";
+import { getTotalSizeRaw } from "../utils/getSize.js";
 
 const prisma = new PrismaClient();
 
@@ -16,15 +17,18 @@ const seed = async () => {
         }
     }).then(res => logger.info(res))
 
+    const currentSize = await getTotalSizeRaw('public/dl')
     await prisma.config.upsert({
         where: {
             id: 'global'
         },
         update: {
-            downloadURL: URL_PREFIX + '/dl/'
+            downloadURL: URL_PREFIX + '/dl/',
+            currentSize,
         },
         create: {
-            downloadURL: URL_PREFIX + '/dl/'
+            downloadURL: URL_PREFIX + '/dl/',
+            currentSize,
         }
     }).then(res => logger.info(res))
 }
