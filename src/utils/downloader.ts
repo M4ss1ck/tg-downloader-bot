@@ -31,6 +31,15 @@ export const downloadFile = async (job: Job) => {
             await bot.telegram.deleteMessage(user, msgId).catch(logger.error)
         }
         await unlink(path)
+        await prisma.download.create({
+            data: {
+                tgId: String(user),
+                link: link,
+                path: __dirname + "/public/dl/" + filename,
+                size: BigInt(size ?? 0),
+                status: "active",
+            }
+        }).catch(logger.error)
     } catch (error) {
         logger.error(error)
         await bot.telegram.sendMessage(user, `Failure copying the file.\nPath: ${path ?? "n/a"}`, {
