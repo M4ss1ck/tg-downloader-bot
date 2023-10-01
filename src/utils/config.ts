@@ -1,4 +1,5 @@
 import { prisma } from "../db/prisma.js";
+import { logger } from "../logger/index.js";
 
 export const getConfig = async () => {
     return prisma.config.findUnique({
@@ -19,13 +20,14 @@ export const updateCurrentSize = async (value: number, negative = false) => {
     if (negative) {
         increment *= -1
     }
+    logger.info('received value: ' + value + ' and processed as ' + increment)
     return prisma.config.update({
         where: {
             id: 'global'
         },
         data: {
             currentSize: {
-                increment: value,
+                increment,
             }
         }
     })
@@ -38,6 +40,17 @@ export const updateMaxSize = async (value: number) => {
         },
         data: {
             maxSize: value
+        }
+    })
+}
+
+export const setCurrentSize = async (value: number) => {
+    return prisma.config.update({
+        where: {
+            id: 'global'
+        },
+        data: {
+            currentSize: value
         }
     })
 }

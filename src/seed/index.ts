@@ -17,7 +17,8 @@ const seed = async () => {
         }
     }).then(res => logger.info(res))
 
-    const currentSize = await getTotalSizeRaw('public/dl')
+    const rawSize = await getTotalSizeRaw('public/dl')
+    const currentSize = Number(rawSize / Math.pow(1024, 3))
     await prisma.config.upsert({
         where: {
             id: 'global'

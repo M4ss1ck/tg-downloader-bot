@@ -5,7 +5,7 @@ import { csvExport } from "../utils/csvExport.js";
 import { unlink } from "fs/promises";
 import { downloader } from "../queues/download.js";
 import { getTotalSizeRaw, convertBytes } from "../utils/getSize.js";
-import { updateCurrentSize } from "../utils/config.js";
+import { updateCurrentSize, getConfig, setCurrentSize } from "../utils/config.js";
 
 export const commands = new Composer()
 
@@ -70,8 +70,16 @@ commands.command('clear', async ctx => {
     }
 })
 
-commands.command('following', async ctx => {
+commands.command('config', async ctx => {
     if (ctx.chat.type === 'private') {
+        const config = await getConfig()
+        ctx.sendMessage(`<pre>${JSON.stringify(config, null, 2)}</pre>`, { parse_mode: "HTML" })
+    }
+})
 
+commands.command('reset', async ctx => {
+    if (ctx.chat.type === 'private') {
+        await setCurrentSize(0)
+        ctx.sendMessage('Current Size was reset.')
     }
 })
