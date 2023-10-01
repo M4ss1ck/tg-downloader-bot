@@ -36,7 +36,7 @@ export const downloadFile = async (job: Job) => {
                 tgId: String(user),
                 link: link,
                 path: __dirname + "/public/dl/" + filename,
-                size: BigInt(size ?? 0),
+                size: Number(size),
                 status: "active",
             }
         }).catch(logger.error)
