@@ -17,7 +17,10 @@ commands.command(['dls', 'downloads'], async ctx => {
 
 commands.command('metrics', async ctx => {
     const metrics = await downloader.getMetrics('completed');
-    ctx.sendMessage(`<pre>${JSON.stringify(metrics, null, 2)}</pre>`, { parse_mode: "HTML" })
+    const text = JSON.stringify(metrics, null, 2)
+    for (let i = 0; i < Math.ceil(text.length / 2037); i++) {
+        ctx.sendMessage(`<pre>${text.substring(i * 2037, (i + 1) * 2037)}</pre>`, { parse_mode: "HTML" }).catch(logger.error)
+    }
 })
 
 commands.command('status', async ctx => {
