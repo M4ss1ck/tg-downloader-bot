@@ -11,13 +11,24 @@ datasource db {
 }
 
 model User {
-  id   Int     @id @default(autoincrement())
-  tgId String  @unique
-  name String?
+  id        Int        @id @default(autoincrement())
+  tgId      String     @unique
+  name      String?
+  downloads Download[]
 }
 
 model Config {
   id          String  @id @default("global")
   maxSize     Int     @default(5) // maximum size in Gb for the queue
   downloadURL String? // domain for download links
+}
+
+model Download {
+  id     String @id @default(cuid())
+  user   User   @relation(fields: [tgId], references: [tgId])
+  tgId   String
+  path   String
+  link   String
+  size   BigInt
+  status String @default("active")
 }
