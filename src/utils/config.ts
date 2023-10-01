@@ -30,3 +30,14 @@ export const updateCurrentSize = async (value: number, negative = false) => {
         }
     })
 }
+
+export const updateMaxSize = async (value: number) => {
+    return prisma.config.update({
+        where: {
+            id: 'global'
+        },
+        data: {
+            maxSize: value
+        }
+    })
+}
