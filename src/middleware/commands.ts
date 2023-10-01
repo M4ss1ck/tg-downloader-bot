@@ -5,6 +5,7 @@ import { csvExport } from "../utils/csvExport.js";
 import { unlink } from "fs/promises";
 import { downloader } from "../queues/download.js";
 import { getTotalSizeRaw, convertBytes } from "../utils/getSize.js";
+import { updateCurrentSize } from "../utils/config.js";
 
 export const commands = new Composer()
 
@@ -45,6 +46,7 @@ commands.command('clear', async ctx => {
             let text = 'Deleted files:'
             for (const dl of myDLs) {
                 await unlink(dl.path)
+                await updateCurrentSize(Number(dl.size), true)
                 const bytes = convertBytes(Number(dl.size || 0))
                 text += `\n${dl.path} (${bytes})`
             }
