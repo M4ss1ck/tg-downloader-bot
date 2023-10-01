@@ -32,9 +32,36 @@ commands.command('status', async ctx => {
     }
 })
 
-commands.command('followers', async ctx => {
+commands.command('clear', async ctx => {
     if (ctx.chat.type === 'private') {
-
+        const userId = ctx.message.from.id
+        try {
+            const myDLs = await prisma.download.findMany({
+                where: {
+                    tgId: String(userId),
+                    status: "active",
+                }
+            })
+            let text = 'Deleted files:'
+            for (const dl of myDLs) {
+                await unlink(dl.path)
+                const bytes = convertBytes(Number(dl.size || 0))
+                text += `\n${dl.path} (${bytes})`
+            }
+            await ctx.replyWithHTML(text)
+            await prisma.download.updateMany({
+                where: {
+                    tgId: String(userId),
+                    status: "active",
+                },
+                data: {
+                    status: "inactive"
+                }
+            })
+        } catch (error) {
+            logger.error(error)
+            await ctx.replyWithHTML('I put a spoon in the microwave and something bad happened!')
+        }
     }
 })
 
