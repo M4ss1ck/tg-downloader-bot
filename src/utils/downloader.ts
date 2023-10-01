@@ -9,7 +9,7 @@ import { URL_PREFIX } from "../config/index.js"
 
 export const downloadFile = async (job: Job) => {
     logger.info('Processing job ' + job.id)
-    const { name, size, user, path } = job.data.data
+    const { name, size, user, path, msgId } = job.data.data
     console.log({ name, size, user, path })
     try {
         if (!path) {
@@ -27,6 +27,9 @@ export const downloadFile = async (job: Job) => {
             parse_mode: "HTML",
             disable_web_page_preview: true,
         })
+        if (user && msgId) {
+            await bot.telegram.deleteMessage(user, msgId).catch(logger.error)
+        }
         await unlink(path)
     } catch (error) {
         logger.error(error)
