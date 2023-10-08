@@ -8,11 +8,12 @@ import { getConfig, updateCurrentSize } from "./config.js"
 import { URL_PREFIX } from "../config/index.js"
 import { processLink } from "../services/ytdl.js"
 
-export const addTempLink = async (url: string, tgId: string) => {
+export const addTempLink = async (url: string, tgId: string, title: string) => {
     return prisma.link.create({
         data: {
             tgId,
             url,
+            title,
         }
     })
 }
