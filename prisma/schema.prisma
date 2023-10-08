@@ -33,3 +33,10 @@ model Download {
   size   Float
   status String @default("active")
 }
+
+model Link {
+  id    Int    @id @default(autoincrement())
+  tgId  String
+  url   String
+  title String @default("")
+}

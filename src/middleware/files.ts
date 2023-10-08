@@ -52,6 +52,7 @@ files.on([message('document'), message('video'), message('audio')], async ctx =>
             user: user.id,
             path,
             msgId,
+            type: 'local'
         }
         const job = await downloader.add(`${user.id}-${name ?? Date.now()}`, { data: downloadObject })
         console.log(job.data)

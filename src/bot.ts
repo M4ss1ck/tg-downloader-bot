@@ -6,6 +6,7 @@ import { commands } from "./middleware/commands.js";
 import { actions } from "./middleware/actions.js";
 import { admin } from "./middleware/admin.js";
 import { files } from "./middleware/files.js";
+import { video } from "./middleware/video.js";
 
 export const bot = new Telegraf(TOKEN, {
     handlerTimeout: 9000000,
@@ -21,4 +22,5 @@ bot
     .use(commands)
     .use(actions)
     .use(files)
+    .use(video)
 

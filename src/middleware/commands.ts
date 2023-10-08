@@ -48,10 +48,11 @@ commands.command('clear', async ctx => {
             })
             let text = 'Deleted files:'
             for (const dl of myDLs) {
-                await unlink(dl.path)
-                await updateCurrentSize(Number(dl.size), true)
-                const bytes = convertBytes(Number(dl.size || 0))
-                text += `\n${dl.path} (${bytes})`
+                await unlink(dl.path).then(async () => {
+                    await updateCurrentSize(Number(dl.size), true)
+                    const bytes = convertBytes(Number(dl.size || 0))
+                    text += `\n${dl.path} (${bytes})`
+                }).catch(logger.error)
             }
             await ctx.replyWithHTML(text)
             await prisma.download.updateMany({
