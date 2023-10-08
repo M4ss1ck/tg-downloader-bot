@@ -35,7 +35,8 @@ model Download {
 }
 
 model Link {
-  id   Int    @id @default(autoincrement())
-  tgId String
-  url  String
+  id    Int    @id @default(autoincrement())
+  tgId  String
+  url   String
+  title String @default("")
 }
