@@ -1,15 +1,22 @@
-import { Queue, Worker, QueueEvents, MetricsTime } from 'bullmq';
+import { Queue, Worker, QueueEvents, MetricsTime, Job } from 'bullmq';
 import { logger } from '../logger/index.js';
 import { downloadFile } from '../utils/downloader.js';
+import { downloadVideo } from '../utils/videoDownloader.js';
 
 const connection = {
     host: "localhost",
     port: 6379
 }
 
+const handleJob = async (job: Job) => {
+    if (job.data && job.data.data && job.data.data.type === "local") {
+        return downloadFile(job)
+    } else downloadVideo(job)
+}
+
 export const downloader = new Queue('dl', { connection });
 export const queueEvents = new QueueEvents('dl', { connection });
-export const worker = new Worker('dl', downloadFile, {
+export const worker = new Worker('dl', handleJob, {
     concurrency: 1,
     connection,
     metrics: {
