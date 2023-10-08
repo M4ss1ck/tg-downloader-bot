@@ -22,8 +22,6 @@ video.command(['dl', 'url'], async ctx => {
 
             const buttons = btnLabels.map((label, i) => [Markup.button.callback(label, `dl_${id}_${iTags[i]}`)])
             const keyboard = Markup.inlineKeyboard(buttons)
-            // const job = await downloader.add(`${user.id}-${name ?? Date.now()}`, { data: downloadObject })
-            // console.log(job.data)
             const text = `${info.videoDetails.title ?? 'Title n/a'}\n\nList of available formats:\n${btnLabels.join('\n')}`
             return ctx.replyWithHTML(text, keyboard)
         } catch (error) {
@@ -40,8 +38,6 @@ video.action(/dl_(\d+)_(\d+)/, async ctx => {
 
         const link = await getTempLink(Number(urlId))
         if (!link) return ctx.answerCbQuery('Error with request, try a different option.', { show_alert: true }).catch(logger.error)
-
-        // const file = ytdl(link.url, {quality})
 
         const downloadObject = {
             name: `${ctx.callbackQuery.data}.${ext}`,
@@ -72,8 +68,6 @@ video.hears(urls, async ctx => {
 
             const buttons = btnLabels.map((label, i) => [Markup.button.callback(label, `dl_${id}_${iTags[i]}`)])
             const keyboard = Markup.inlineKeyboard(buttons)
-            // const job = await downloader.add(`${user.id}-${name ?? Date.now()}`, { data: downloadObject })
-            // console.log(job.data)
             const text = `${info.videoDetails.title ?? 'Title n/a'}\n\nList of available formats:\n${btnLabels.join('\n')}`
             return ctx.replyWithHTML(text, keyboard)
         } catch (error) {
