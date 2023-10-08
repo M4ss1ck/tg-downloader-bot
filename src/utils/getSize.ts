@@ -55,3 +55,5 @@ export const getTotalSize = async (directoryPath: string) => {
     const size = await getTotalSizeRaw(directoryPath)
     return convertBytes(size)
 }
+
+export const getFileSize = async (filePath: string) => (await fs.stat(filePath)).size
