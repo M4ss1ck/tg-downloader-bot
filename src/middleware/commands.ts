@@ -26,9 +26,23 @@ commands.command('metrics', async ctx => {
 commands.command('status', async ctx => {
     try {
         if (ctx.chat.type === 'private') {
+            const userId = ctx.message.from.id
             const size = await getTotalSizeRaw('public/dl')
-            console.log(size)
-            ctx.replyWithHTML(`Used space: ${convertBytes(size)}`)
+            let text = `Total used space: ${convertBytes(size)}`
+            const myDLs = await prisma.download.findMany({
+                where: {
+                    tgId: String(userId),
+                    status: "active",
+                }
+            })
+            if (myDLs && myDLs.length > 0) {
+                text += `\n\nMy files:\n${myDLs.map((dl, i) => {
+                    const name = dl.path.split('/').pop()
+                    const size = convertBytes(dl.size)
+                    return `${i + 1}. <a href="${dl.link}">${name}</a> (${size})`
+                })}`
+            }
+            ctx.replyWithHTML(text)
         }
     } catch (error) {
         logger.log(error)
