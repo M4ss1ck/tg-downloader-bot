@@ -14,7 +14,7 @@ video.command(['dl', 'url'], async ctx => {
             const [url, name] = ctx.message.text.replace(/^\/(dl|url)\s+/, '').split(' ')
             // TODO: validate url
             const info = await ytdl.getInfo(url)
-            const btnLabels = info.formats.map(f => `[${f.container}]${f.hasVideo ? `[${f.qualityLabel}] ${f.height ?? 'n/a'}x${f.width ?? 'n/a'} ` : ''} Video: ${f.hasVideo ? '✅' : '❌'} Audio: ${f.hasAudio ? '✅' : '❌'} (${convertBytes(Number(f.contentLength ?? '0'))})`)
+            const btnLabels = info.formats.map(f => `[${f.container}]${f.hasVideo ? `[${f.qualityLabel}] ${f.height ?? 'n/a'}x${f.width ?? 'n/a'} ` : ''} 📹: ${f.hasVideo ? '✅' : '❌'} 🔈: ${f.hasAudio ? '✅' : '❌'} (${convertBytes(Number(f.contentLength ?? '0'))})`)
             const iTags = info.formats.map(f => `${f.itag}_${f.container}`)
             console.log(info)
             // add to database to fetch a given format later
@@ -60,7 +60,7 @@ video.hears(urls, async ctx => {
             const user = ctx.message.from
             const url = ctx.message.text
             const info = await ytdl.getInfo(url)
-            const btnLabels = info.formats.map(f => `[${f.container}]${f.hasVideo ? `[${f.qualityLabel}] ${f.height ?? 'n/a'}x${f.width ?? 'n/a'} ` : ''} Video: ${f.hasVideo ? '✅' : '❌'} Audio: ${f.hasAudio ? '✅' : '❌'} (${convertBytes(Number(f.contentLength ?? '0'))})`)
+            const btnLabels = info.formats.map(f => `[${f.container}]${f.hasVideo ? `[${f.qualityLabel}] ${f.height ?? 'n/a'}x${f.width ?? 'n/a'} ` : ''} 📹: ${f.hasVideo ? '✅' : '❌'} 🔈: ${f.hasAudio ? '✅' : '❌'} (${convertBytes(Number(f.contentLength ?? '0'))})`)
             const iTags = info.formats.map(f => `${f.itag}_${f.container}`)
             console.log(info)
             // add to database to fetch a given format later
