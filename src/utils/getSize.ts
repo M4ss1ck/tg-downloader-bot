@@ -39,7 +39,6 @@ export const convertBytes = function (bytes: number) {
 }
 
 export const getTotalSizeRaw = async function (directoryPath: string) {
-    console.log(__dirname);
     const arrayOfFiles = await getAllFiles(directoryPath)
 
     let totalSize = 0
