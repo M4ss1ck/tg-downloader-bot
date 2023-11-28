@@ -13,7 +13,8 @@ const server = app.listen(PORT, () => logger.success(`Server listening on port: 
 const gracefulStop = (signal: string) => async () => {
     await worker.close()
     server.closeAllConnections()
-    bot.stop(signal)
+    if (bot)
+        bot.stop(signal)
 }
 
 // Enable graceful stop
