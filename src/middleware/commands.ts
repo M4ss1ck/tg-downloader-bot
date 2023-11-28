@@ -12,14 +12,14 @@ export const commands = new Composer()
 commands.command(['dls', 'downloads'], async ctx => {
     const counts = await downloader.getJobCounts('wait', 'completed', 'failed');
     // Returns an object like this { wait: number, completed: number, failed: number }
-    ctx.sendMessage(`<pre>${JSON.stringify(counts, null, 2)}</pre>`, { parse_mode: "HTML" })
+    return ctx.sendMessage(`<pre>${JSON.stringify(counts, null, 2)}</pre>`, { parse_mode: "HTML" })
 })
 
 commands.command('metrics', async ctx => {
     const metrics = await downloader.getMetrics('completed');
     const text = JSON.stringify(metrics, null, 2)
     for (let i = 0; i < Math.ceil(text.length / 2037); i++) {
-        ctx.sendMessage(`<pre>${text.substring(i * 2037, (i + 1) * 2037)}</pre>`, { parse_mode: "HTML" }).catch(logger.error)
+        await ctx.sendMessage(`<pre>${text.substring(i * 2037, (i + 1) * 2037)}</pre>`, { parse_mode: "HTML" }).catch(logger.error)
     }
 })
 
@@ -42,11 +42,36 @@ commands.command('status', async ctx => {
                     return `${i + 1}. <a href="${dl.link}">${name}</a> (${size})`
                 })}`
             }
-            ctx.replyWithHTML(text)
+            return ctx.replyWithHTML(text)
         }
     } catch (error) {
         logger.log(error)
-        ctx.replyWithHTML('Oops! Some random sprites ate the previous command\'s response')
+        return ctx.replyWithHTML('Oops! Some random sprites ate the previous command\'s response')
+    }
+})
+
+commands.command('list', async ctx => {
+    try {
+        if (ctx.chat.type === 'private') {
+            const size = await getTotalSizeRaw('public/dl')
+            let text = `Total used space: ${convertBytes(size)}`
+            const downloads = await prisma.download.findMany({
+                where: {
+                    status: "active",
+                }
+            })
+            if (downloads && downloads.length > 0) {
+                text += `\n\nAll files:\n${downloads.map((dl, i) => {
+                    const name = dl.path.split('/').pop()
+                    const size = convertBytes(dl.size)
+                    return `${i + 1}. <a href="${dl.link}">${name}</a> (${size})`
+                })}`
+            }
+            return ctx.replyWithHTML(text)
+        }
+    } catch (error) {
+        logger.log(error)
+        return ctx.replyWithHTML('Oops! Some random sprites ate the previous command\'s response')
     }
 })
 
@@ -89,6 +114,6 @@ commands.command('config', async ctx => {
     if (ctx.chat.type === 'private') {
         const config = await getConfig()
         const text = config ? `Current configuration:\n${Number(config.currentSize).toFixed(2)}/${Number(config.maxSize)}GB\nURL: ${config.downloadURL}` : "No config found!"
-        ctx.sendMessage(text, { parse_mode: "HTML" })
+        return ctx.sendMessage(text, { parse_mode: "HTML" })
     }
 })

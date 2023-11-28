@@ -7,10 +7,7 @@ export const validator = new Composer()
 
 validator.use(async (ctx, next) => {
     try {
-        if (ctx.has('my_chat_member')) {
-            return ctx.leaveChat()
-        }
-        else if (ctx.from && ctx.chat?.type === "private") {
+        if (ctx.from && ctx.chat?.type === "private") {
             const tgId = ctx.from.id.toString();
             const currentUser = await prisma.user.findUnique({
                 where: {
