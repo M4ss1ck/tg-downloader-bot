@@ -91,10 +91,3 @@ commands.command('config', async ctx => {
         ctx.sendMessage(`<pre>${JSON.stringify(config, null, 2)}</pre>`, { parse_mode: "HTML" })
     }
 })
-
-commands.command('reset', async ctx => {
-    if (ctx.chat.type === 'private') {
-        await setCurrentSize(0)
-        ctx.sendMessage('Current Size was reset.')
-    }
-})
