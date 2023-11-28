@@ -88,6 +88,7 @@ commands.command('clear', async ctx => {
 commands.command('config', async ctx => {
     if (ctx.chat.type === 'private') {
         const config = await getConfig()
-        ctx.sendMessage(`<pre>${JSON.stringify(config, null, 2)}</pre>`, { parse_mode: "HTML" })
+        const text = config ? `Current configuration:\n${Number(config.currentSize).toFixed(2)}/${Number(config.maxSize)}GB\nURL: ${config.downloadURL}` : "No config found!"
+        ctx.sendMessage(text, { parse_mode: "HTML" })
     }
 })
